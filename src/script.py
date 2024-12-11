@@ -38,38 +38,6 @@ if __name__ == "__main__":
         sys_exit(1)
 
     year = int(date.today().year)
-
-    if leaderboard is None or leaderboard == '':
-        leaderboard = f'https://adventofcode.com/{year}/leaderboard/private/view/{userid}.json'
-    else:
-        leaderboard = f'https://adventofcode.com/{year}/leaderboard/private/view/{leaderboard}.json'
-
-    ### Fetch leaderboard data
-    cookie = {'session': session}
-    print('Fetching leaderboard data: ' + leaderboard)
-    r = requests.get(leaderboard, cookies=cookie)
-    if r.status_code != 200:
-        print(f'Got status code {r.status_code}: {r.text}')
-        sys_exit(1)
-    try:
-        data = json.loads(r.text)
-    except json.JSONDecodeError as err:
-        print('Could not parse json from leaderboard. Check the leaderboard id and the session cookie.')
-        sys_exit(1)
-
-    ### Extract user data
-    user = data['members'][userid]
-    stars = user['stars']
-    score = user['local_score']
-    member_scores = [member['local_score'] for member in data['members'].values()]
-    member_scores.sort(reverse=True)
-    position = member_scores.index(score) + 1
-
-    days_completed = 0
-    for day in data['members'][userid]['completion_day_level']:
-        if '2' in data['members'][userid]['completion_day_level'][day]:
-            days_completed += 1
-
     new_york_tz = pytz.timezone('America/New_York')
     today = datetime.now(new_york_tz).date()
 
@@ -79,6 +47,45 @@ if __name__ == "__main__":
         day = 24
     else:
         day = today.day
+
+    if leaderboard is None or leaderboard == '':
+        leaderboard = f'https://adventofcode.com/{year}/leaderboard/private/view/{userid}.json'
+    else:
+        leaderboard = f'https://adventofcode.com/{year}/leaderboard/private/view/{leaderboard}.json'
+
+    ### Fetch leaderboard data
+    if today >= datetime(year, 12, 1, tzinfo=new_york_tz).date() or today <= datetime(year, 1, 15, tzinfo=new_york_tz).date():
+        cookie = {'session': session}
+        print('Fetching leaderboard data: ' + leaderboard)
+        r = requests.get(leaderboard, cookies=cookie)
+        if r.status_code != 200:
+            print(f'Got status code {r.status_code}: {r.text}')
+            sys_exit(1)
+        try:
+            data = json.loads(r.text)
+        except json.JSONDecodeError as err:
+            print('Could not parse json from leaderboard. Check the leaderboard id and the session cookie.')
+            sys_exit(1)
+
+        ### Extract user data
+        user = data['members'][userid]
+        stars = user['stars']
+        score = user['local_score']
+        member_scores = [member['local_score'] for member in data['members'].values()]
+        member_scores.sort(reverse=True)
+        position = member_scores.index(score) + 1
+
+        days_completed = 0
+        for day in data['members'][userid]['completion_day_level']:
+            if '2' in data['members'][userid]['completion_day_level'][day]:
+                days_completed += 1
+
+    else:
+        print('Not fetching leaderboard data.')
+        stars = 0
+        score = 0
+        position = 0
+        days_completed = 0
 
     ### Generate SVG
     elements = [
