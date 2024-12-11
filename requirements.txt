@@ -1,0 +1,6 @@
+# Tested with Python 3.11.9 and pip 23.2.1
+
+requests
+pytz
+svg.py
+python-dotenv

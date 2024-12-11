@@ -1,0 +1,41 @@
+name: 'AoC Badge Action'
+description: 'A GitHub Action that generates a badge for Advent of Code and adds it to the README'
+inputs:
+  session:
+    description: 'The session cookie for Advent of Code'
+    required: true
+  userid:
+    description: 'The id of the user you want to track'
+    required: true
+  leaderboard:
+    description: 'The id of the leaderboard you want to track'
+    required: false
+  file:
+    description: 'The file the badge will be added to'
+    required: false
+    default: 'README.md'
+outputs:
+  success:
+    description: 'Whether the action was successful'
+    value: ${{ steps.run-python.outputs.success }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'  
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+      shell: bash
+    - name: Pass Inputs to Shell
+      run: |
+        echo "SESSION=${{ inputs.session }}" >> $GITHUB_ENV
+        echo "USERID=${{ inputs.userid }}" >> $GITHUB_ENV
+        echo "LEADERBOARD=${{ inputs.leaderboard }}" >> $GITHUB_ENV
+        echo "FILE=${{ inputs.file }}" >> $GITHUB_ENV
+      shell: bash
+    - name: Run the python script
+      id: run-python
+      run: python src/script.py
+      shell: bash
