@@ -21,14 +21,12 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - name: Checkout
-      uses: actions/checkout@v4
     - name: Install Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'  
     - name: Install dependencies
-      run: pip install -r requirements.txt
+      run: pip install -r ${{ github.action_path }}/requirements.txt
       shell: bash
     - name: Pass Inputs to Shell
       run: |
@@ -39,5 +37,5 @@ runs:
       shell: bash
     - name: Run the python script
       id: run-python
-      run: python src/script.py
+      run: python ${{ github.action_path }}/src/script.py
       shell: bash
