@@ -31,7 +31,12 @@ if __name__ == "__main__":
     filename = os.environ.get('FILE')
     if filename is None or filename == '':
         print('No file found - but continuing anyway!')
-        filename = './README.md'
+        filename = 'README.md'
+
+    action_path = os.environ.get('GITHUB_ACTION_PATH')
+    workspace = os.environ.get('GITHUB_WORKSPACE')
+    print(f'Action path: {action_path}')
+    print(f'Workspace: {workspace}')
 
     if not os.path.exists(filename):
         print(f'File {filename} not found!')
@@ -140,10 +145,10 @@ if __name__ == "__main__":
 
     canvas_parts = str(canvas).split('<g id="logo"/>')
 
-    if not os.path.exists('./aoc-logo.svg'):
+    if not os.path.exists(os.path.join(action_path, 'aoc-logo.svg')):
         print("AoC logo not found. Badge will be generated without it.")
 
-    with open('./aoc-logo.svg', 'r') as f:
+    with open(os.path.join(action_path, 'aoc-logo.svg'), 'r') as f:
         logo = f.read()
 
     canvas_with_logo = canvas_parts[0] + logo + canvas_parts[1]
@@ -151,11 +156,11 @@ if __name__ == "__main__":
 
     print("Inserted logo. Writing badge to file...")
 
-    with open('./aoc-badge.svg', 'w') as f:
+    with open(os.path.join(workspace, 'aoc-badge.svg'), 'w') as f:
         f.write(canvas_with_logo)
 
     ### Update README
-    with open('README.md', 'r') as file:
+    with open(os.path.join(workspace, filename), 'r') as file:
         readme_content = file.readlines()
 
     start_marker = "<!-- START_AOC_BADGE -->\n"
@@ -174,7 +179,7 @@ if __name__ == "__main__":
         </a>
     """)] + readme_content[end_index:]
 
-    with open('README.md', 'w') as file:
+    with open(os.path.join(workspace, filename), 'w') as file:
         file.writelines(new_readme_content)
 
     print("AoC badge updated successfully!")

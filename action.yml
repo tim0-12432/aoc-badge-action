@@ -34,6 +34,8 @@ runs:
         echo "USERID=${{ inputs.userid }}" >> $GITHUB_ENV
         echo "LEADERBOARD=${{ inputs.leaderboard }}" >> $GITHUB_ENV
         echo "FILE=${{ inputs.file }}" >> $GITHUB_ENV
+        echo "GITHUB_WORKSPACE=${{ github.workspace }}" >> $GITHUB_ENV
+        echo "GITHUB_ACTION_PATH=${{ github.action_path }}" >> $GITHUB_ENV
       shell: bash
     - name: Run the python script
       id: run-python
