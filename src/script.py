@@ -76,8 +76,8 @@ if __name__ == "__main__":
         position = member_scores.index(score) + 1
 
         days_completed = 0
-        for day in data['members'][userid]['completion_day_level']:
-            if '2' in data['members'][userid]['completion_day_level'][day]:
+        for day_level in data['members'][userid]['completion_day_level']:
+            if '2' in data['members'][userid]['completion_day_level'][day_level]:
                 days_completed += 1
 
     else:

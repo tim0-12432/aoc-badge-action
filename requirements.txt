@@ -1,4 +1,4 @@
-# Tested with Python 3.11.9 and pip 23.2.1
+# Tested with Python 3.12.1 and pip 23.2.1
 
 requests
 pytz
