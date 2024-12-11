@@ -89,38 +89,35 @@ if __name__ == "__main__":
 
     ### Generate SVG
     elements = [
-        svg.Style(
-            text=dedent("""
-                text { font-family: Consolas, monospace; }
-            """),
-        ),
         svg.Rect(
             x=0, y=0,
             rx=5, ry=5,
             width=100, height=40,
             fill='#22272e'
         ),
-        svg.Image(
-            href='./aoc-logo.svg',
-            x=5, y=5,
+        svg.G(
+            id='logo'
         ),
         svg.Text(
             x=45, y=12,
             font_size=6,
             fill='#cdd9e5',
-            text=f'Days: {days_completed}/{day}'
+            text=f'Days: {days_completed}/{day}',
+            font_family='Consolas, monospace'
         ),
         svg.Text(
             x=45, y=22,
             font_size=6,
             fill='#cdd9e5',
-            text=f'Stars: {stars}'
+            text=f'Stars: {stars}',
+            font_family='Consolas, monospace'
         ),
         svg.Text(
             x=77, y=22,
             font_size=6,
             fill='#ffff3e',
-            text='*'
+            text='*',
+            font_family='Consolas, monospace'
         ),
     ]
 
@@ -130,7 +127,8 @@ if __name__ == "__main__":
                 x=45, y=32,
                 font_size=6,
                 fill='#cdd9e5',
-                text=f'Score: {score} ({position})'
+                text=f'Score: {score} ({position})',
+                font_family='Consolas, monospace'
             )
         )
 
@@ -140,8 +138,21 @@ if __name__ == "__main__":
         elements=elements
     )
 
+    canvas_parts = str(canvas).split('<g id="logo"/>')
+
+    if not os.path.exists('./aoc-logo.svg'):
+        print("AoC logo not found. Badge will be generated without it.")
+
+    with open('./aoc-logo.svg', 'r') as f:
+        logo = f.read()
+
+    canvas_with_logo = canvas_parts[0] + logo + canvas_parts[1]
+    canvas_with_logo = dedent(canvas_with_logo).replace('\n', '').strip()
+
+    print("Inserted logo. Writing badge to file...")
+
     with open('./aoc-badge.svg', 'w') as f:
-        f.write(str(canvas))
+        f.write(canvas_with_logo)
 
     ### Update README
     with open('README.md', 'r') as file:
