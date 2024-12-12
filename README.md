@@ -1,8 +1,10 @@
 # Advent of Code Badge GitHub Action
 
-<a href="https://adventofcode.com/">
-<img width="50%" alt="AoC Badge" src="./aoc-badge.svg"/>
-</a>
+<div align="center">
+  <a href="https://adventofcode.com/">
+    <img width="50%" alt="AoC Badge" src="./aoc-badge.svg"/>
+  </a>
+</div>
 
 ## README adjustments
 

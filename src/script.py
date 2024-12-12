@@ -2,6 +2,7 @@ from datetime import date, datetime
 from dotenv import load_dotenv
 from textwrap import dedent
 import requests
+import random
 import json
 import pytz
 import svg
@@ -148,19 +149,26 @@ if __name__ == "__main__":
 
     canvas_parts = str(canvas).split('<g id="logo"/>')
 
-    if not os.path.exists(os.path.join(action_path, 'aoc-logo.svg')):
-        print("AoC logo not found. Badge will be generated without it.")
+    logo_dir = os.path.join(action_path, 'src', 'logos')
+    
+    if not os.path.exists(logo_dir):
+        print("AoC logos not found. Badge will be generated without it.")
+        with open(os.path.join(workspace, 'aoc-badge.svg'), 'w') as f:
+            f.write(canvas)
+    else:
+        logos = os.listdir(logo_dir)
+        logo_name = random.choice(logos)
 
-    with open(os.path.join(action_path, 'aoc-logo.svg'), 'r') as f:
-        logo = f.read()
+        with open(os.path.join(logo_dir, logo_name), 'r') as f:
+            logo = f.read()
 
-    canvas_with_logo = canvas_parts[0] + logo + canvas_parts[1]
-    canvas_with_logo = dedent(canvas_with_logo).replace('\n', '').strip()
+        canvas_with_logo = canvas_parts[0] + logo + canvas_parts[1]
+        canvas_with_logo = dedent(canvas_with_logo).replace('\n', '').strip()
 
-    print("Inserted logo. Writing badge to file...")
+        print("Inserted logo. Writing badge to file...")
 
-    with open(os.path.join(workspace, 'aoc-badge.svg'), 'w') as f:
-        f.write(canvas_with_logo)
+        with open(os.path.join(workspace, 'aoc-badge.svg'), 'w') as f:
+            f.write(canvas_with_logo)
 
     ### Update README
     with open(os.path.join(workspace, filename), 'r') as file:
