@@ -37,6 +37,7 @@ jobs:
 #         
 #         leaderboard: 123456 # The leaderboard to track; defaults to the users private leaderboard
 #         file: './README.md' # The file to add the badges to; defaults to ./README.md
+#         width: '30%'        # The width of the badge in the file; defaults to 50%
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:

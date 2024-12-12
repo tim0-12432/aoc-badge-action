@@ -14,6 +14,10 @@ inputs:
     description: 'The file the badge will be added to'
     required: false
     default: 'README.md'
+  width:
+    description: 'The width of the badge'
+    required: false
+    default: '50%'
 outputs:
   success:
     description: 'Whether the action was successful'
@@ -34,6 +38,7 @@ runs:
         echo "USERID=${{ inputs.userid }}" >> $GITHUB_ENV
         echo "LEADERBOARD=${{ inputs.leaderboard }}" >> $GITHUB_ENV
         echo "FILE=${{ inputs.file }}" >> $GITHUB_ENV
+        echo "WIDTH=${{ inputs.width }}" >> $GITHUB_ENV
         echo "GITHUB_WORKSPACE=${{ github.workspace }}" >> $GITHUB_ENV
         echo "GITHUB_ACTION_PATH=${{ github.action_path }}" >> $GITHUB_ENV
       shell: bash

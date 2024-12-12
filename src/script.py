@@ -32,6 +32,9 @@ if __name__ == "__main__":
     if filename is None or filename == '':
         print('No file found - but continuing anyway!')
         filename = 'README.md'
+    badge_width = os.environ.get('WIDTH')
+    if badge_width is None or badge_width == '':
+        badge_width = '50%'
 
     action_path = os.environ.get('GITHUB_ACTION_PATH')
     workspace = os.environ.get('GITHUB_WORKSPACE')
@@ -173,11 +176,10 @@ if __name__ == "__main__":
         print("Too early this year. Removing AoC badge.")
         new_readme_content = readme_content[:start_index] + readme_content[end_index:]
     else:
-        new_readme_content = readme_content[:start_index] + [dedent("""
-        <a href="https://adventofcode.com/">
-        <img width="50%" alt="AoC Badge" src="./aoc-badge.svg"/>
-        </a>
-    """)] + readme_content[end_index:]
+        new_readme_content = readme_content[:start_index] + [dedent(f"""<a href="https://adventofcode.com/">
+<img width="{badge_width}" alt="AoC Badge" src="./aoc-badge.svg"/>
+</a>
+""")] + readme_content[end_index:]
 
     with open(os.path.join(workspace, filename), 'w') as file:
         file.writelines(new_readme_content)
