@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
           
-      - uses: tim0-12432/aoc-badge-action
+      - uses: tim0-12432/aoc-badge-action@v0.1.3
         with:
           userid: 123456 # The user to track
           session: ${{ secrets.AOC_SESSION }} # secret containing the session cookie
